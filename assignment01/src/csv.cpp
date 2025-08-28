@@ -73,8 +73,11 @@ namespace csi281 {
   // You'll want to use the standard library function getline()
   // and the readCell() functions above
   // You'll also want to construct a CityYear from what you have read from the file
-  CityYear readLine(ifstream &file) {
-    // YOUR CODE HERE
+  CityYear readLine(ifstream &file) { 
+      CityYear newCityYear;
+      string currentLine;
+      getline(file, currentLine);
+      string toIgnore = readStringCell(currentLine);
   }
 
   // Read city by looking at the specified lines in the CSV
