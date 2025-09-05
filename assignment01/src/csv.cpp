@@ -77,7 +77,16 @@ namespace csi281 {
       CityYear newCityYear;
       string currentLine;
       getline(file, currentLine);
-      string toIgnore = readStringCell(currentLine);
+      istringstream toDecipher(currentLine);
+      readStringCell(toDecipher);
+      readStringCell(toDecipher);
+      newCityYear.year = readIntCell(toDecipher);
+      newCityYear.numDaysBelow32 = readIntCell(toDecipher);
+      newCityYear.numDaysAbove90 = readIntCell(toDecipher);
+      newCityYear.averageTemperature = readFloatCell(toDecipher);
+      newCityYear.averageMax = readFloatCell(toDecipher);
+      newCityYear.averageMin = readFloatCell(toDecipher);
+      return newCityYear;
   }
 
   // Read city by looking at the specified lines in the CSV
@@ -90,5 +99,19 @@ namespace csi281 {
   // create an array of CityYear instances to pass to the CityTemperatureData constructor
   // when the CityTemperatureData is created, it will take ownership of the array
   CityTemperatureData* readCity(string cityName, string fileName, int startLine, int endLine) {
+      ifstream readFile(fileName);
+      string temp;
+      int curline = 0;
+      // set the file on the correct line to read
+      while (getline(readFile, temp) && curline != startLine) {
+        curline++;
+      }
+      CityYear *dataArray = new CityYear[endLine - startLine];
+      for (int i = startLine; i < endLine; i++) {
+          CityYear toAdd = readLine(readFile);
+          *(dataArray + (i - startLine)) = toAdd;
+      }
+      CityTemperatureData* newCity = new CityTemperatureData(cityName, dataArray, endLine - startLine);
+      return newCity;
   }
 }  // namespace csi281
