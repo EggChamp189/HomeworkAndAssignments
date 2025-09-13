@@ -103,15 +103,15 @@ namespace csi281 {
       string temp;
       int curline = 0;
       // set the file on the correct line to read
-      while (getline(readFile, temp) && curline != startLine) {
+      while (getline(readFile, temp) && curline != startLine - 1) {
         curline++;
       }
-      CityYear *dataArray = new CityYear[endLine - startLine];
-      for (int i = startLine; i < endLine; i++) {
+      CityYear *dataArray = new CityYear[endLine - startLine + 1];
+      for (int i = startLine; i <= endLine; i++) {
           CityYear toAdd = readLine(readFile);
           *(dataArray + (i - startLine)) = toAdd;
       }
-      CityTemperatureData* newCity = new CityTemperatureData(cityName, dataArray, endLine - startLine);
+      CityTemperatureData* newCity = new CityTemperatureData(cityName, dataArray, endLine - startLine + 1);
       return newCity;
   }
 }  // namespace csi281
