@@ -35,14 +35,33 @@ namespace csi281 {
 
   // Returns the first location of the found key
   // or -1 if the key is never found
-  template <typename T> int linearSearch(T array[], const int length, const T key) {
-    // YOUR CODE HERE
+  template <typename T> int linearSearch(T array[], const int length, const T key) { 
+      for (int i = 0; i < length; i++) {
+      if (array[i] == key) return i;
+      }
+      return -1;
   }
+
 
   // Returns the first location of the found key
   // or -1 if the key is never found; assumes a sorted array
   template <typename T> int binarySearch(T array[], const int length, const T key) {
-    // YOUR CODE HERE
+      // assume comparable, chars will be case sensitive searching
+      int curMin = 0; // min bound
+      int curMax = length - 1; // max bound
+      
+      while (curMin <= curMax) {
+        int curIndex = (curMin + curMax) / 2; // get the midpoint
+        if (array[curIndex] == key) {
+          return curIndex; // success
+        } else if (array[curIndex] < key) {
+          curMin = curIndex + 1; // too low, raising min
+        } else {
+          curMax = curIndex - 1; // too high, lowering max
+        }
+      }
+
+      return -1; // nothing found
   }
 }  // namespace csi281
 

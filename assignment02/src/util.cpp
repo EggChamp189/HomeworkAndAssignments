@@ -40,8 +40,22 @@ namespace csi281 {
   // Returns a new int array of *length* and filled
   // with numbers between *min* and *max*
   // Suggest using the facilities in STL <random>
+    // used setup from the uniform_int_distribution cpprefrence.com page
   int *randomIntArray(const int length, const int min, const int max) {
     // YOUR CODE HERE
+    // used example from https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution.html
+    random_device rd;   // a seed source for the random number engine
+    mt19937 gen(rd());  // mersenne_twister_engine seeded with rd()
+    uniform_int_distribution<> distrib(min, max);
+    int *arrayToMake = new int[length];
+
+    for (int i = 0; i < length; i++) {
+      *(arrayToMake + i) = distrib(gen);
+    }
+
+    sort(*arrayToMake, *(arrayToMake + length));
+
+    return arrayToMake;
   }
 
   // Finds the speed of linear versus binary search
@@ -69,11 +83,34 @@ namespace csi281 {
     // Put the result in a variable linearSearchSpeed
 
     // YOUR CODE HERE
+    // got this more precise idea from this article: https://www.geeksforgeeks.org/c/measure-execution-time-with-high-precision-in-c-c/
+    auto start = duration_cast<nanoseconds>(system_clock::now().time_since_epoch()).count();
+
+    for (int i = 0; i < numTests; i++) {
+      linearSearch
+      (testArray, 
+          length, 
+          *(testKeys + i));
+    }
+
+    auto end = duration_cast<nanoseconds>(system_clock::now().time_since_epoch()).count();
+    //double time_taken = duration_cast<nanoseconds>(end - start).count();
+    nanoseconds linearSearchSpeed = (nanoseconds)((end - start) / numTests);
 
     // Do numTests binary searches and find the average time
     // Put the result in a variable binarySearchSpeed
 
     // YOUR CODE HERE
+
+    auto start2 = duration_cast<nanoseconds>(system_clock::now().time_since_epoch()).count();
+
+    for (int i = 0; i < numTests; i++) {
+      binarySearch(testArray, length, *(testKeys + i));
+    }
+
+    auto end2 = duration_cast<nanoseconds>(system_clock::now().time_since_epoch()).count();
+    // double time_taken = duration_cast<nanoseconds>(end - start).count();
+    nanoseconds binarySearchSpeed = (nanoseconds)((end2 - start2) / numTests);
 
     delete testArray;
     delete testKeys;

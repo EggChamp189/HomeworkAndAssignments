@@ -1,0 +1,7 @@
+1. The answer would be O(n * log(n)), since the sorting of the function is the longest part of randomIntArray(), as it needs to individually move every term (n) a number of times equal to one binary search (log(n))
+2. The answer would be O(n^2), since the linear search itself will always be n, while looping the linear search will be doing that linear search another n times.
+3. While the binary search method is many times over faster, the array needs to be sorted first. 
+   the sorting algorithm takes 12 * 10,000 * log(10,000), which equals 13.287712379549 * 10,000 * 12, or roughly 1,594,525 calculations
+   each run of the linear search is going to be 50000 from the 10,000 elements multiplied by the 5 instructions.
+   so the answer is 1,594,525 / 50,000 , which equals 32 when we round up.
+4. I believe any other type that has 2 items in one would work, so arrays, vectors, and lists all work.
