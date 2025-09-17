@@ -53,7 +53,7 @@ namespace csi281 {
       *(arrayToMake + i) = distrib(gen);
     }
 
-    sort(*arrayToMake, *(arrayToMake + length));
+    sort(arrayToMake, (arrayToMake + length));
 
     return arrayToMake;
   }
