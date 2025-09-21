@@ -29,6 +29,7 @@
 #define linkedlist_hpp
 
 #include "Collection.h"
+#include <cassert>
 #include "MemoryLeakDetector.h"
 
 using namespace std;
@@ -54,6 +55,14 @@ namespace csi281 {
     // Return -1 if it is not found
     int find(const T &item) {
       // YOUR CODE HERE
+      Node *current = head;
+      for (int i = 0; current != nullptr; i++) {
+        if (current->data == item) {
+          return i;
+        }
+        current = current->next;
+      }
+      return -1;
     }
 
     // Get the item at a particular index
@@ -61,16 +70,41 @@ namespace csi281 {
       assert(index < count);  // can't insert off end
       assert(index >= 0);     // no negative indices
                               // YOUR CODE HERE
+      Node *current = head;
+      for (int i = 0; i < index; i++) {
+        current = current->next;
+      }
+      return current->data;
     }
 
     // Insert at the beginning of the collection
     void insertAtBeginning(const T &item) {
       // YOUR CODE HERE
+      auto newNode = new Node(item);
+      newNode->next = head;
+      head = newNode;
+
+      // if the list is empty
+      if (tail == nullptr) {
+        tail = newNode;
+      }
+
+      count++;
     }
 
     // Insert at the end of the collection
     void insertAtEnd(const T &item) {
       // YOUR CODE HERE
+      if (tail == nullptr) {
+        head = new Node(item);
+        tail = head;
+        count++;
+        return;
+      }
+      auto newNode = new Node(item);
+      tail->next = newNode;
+      tail = newNode;
+      count++;
     }
 
     // Insert at a specific index
@@ -103,12 +137,41 @@ namespace csi281 {
     void removeAtBeginning() {
       assert(count > 0);
       // YOUR CODE HERE
+      Node *newBeginning = head->next;
+      delete head;
+      head = newBeginning;
+
+      if (head == nullptr) {
+        tail = nullptr;
+      }
+
+      count--;
     }
 
     // Remove the item at the end of the collection
     void removeAtEnd() {
       assert(count > 0);
       // YOUR CODE HERE
+      // check for the scenario where there is exactly one item in the list
+      if (count == 1) {
+        delete head;
+        head = nullptr;
+        tail = nullptr;
+        count = 0;
+        return;
+      }
+
+      // I would add a previous node in addition to the next node in order to be more efficient but no clue if I'm allowed to change that;
+      Node *newEnd = head;
+      for (int i = 0; i < count - 2; i++) {
+        newEnd = newEnd->next;
+      }
+
+      delete tail;
+      tail = newEnd;
+      tail->next = nullptr;
+
+      count--;
     }
 
     // Remove the item at a specific index
