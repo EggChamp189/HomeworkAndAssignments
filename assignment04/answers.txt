@@ -1,0 +1,4 @@
+1. Bubble sort is the slowest of the three because it makes a lot of unneccessary swaps and comparisons, since it only checks the elements directly in front, unlike the other two.
+2. An optimized insertion sort is faster because it stops comparing once the correct insertion point is found, while the selection sort will check the whole array for the minimum, which would on average have insertion sort making about half the selections of selection.
+3. A custom class would need to have the ability to be compared against other data members, so some form of an operator overload would be necessary for smooth implementation. For my functions, the operator< or operator> would need to be overloaded.
+4. Std::sort is much faster than any of the three sorting methods here because it uses a highly optimized version of quicksorting instead of any other slower methods.
