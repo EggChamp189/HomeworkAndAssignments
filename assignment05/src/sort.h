@@ -49,6 +49,18 @@ namespace csi281 {
   // http://www.cplusplus.com/reference/algorithm/inplace_merge/
   template <typename T> void mergeSort(T array[], const int start, const int end) {
     // YOUR CODE HERE
+    // array is already sorted
+    if (start >= end) { return; }
+
+    // find the middle
+    int mid = start + ((end - start) / 2);
+
+    // sort!
+    mergeSort(array, start, mid);
+    mergeSort(array, mid + 1, end);
+
+    // I think I'm using the inplace_merge correctly?
+    inplace_merge(array + start, array + mid + 1, array + end + 1);
   }
 
   // setup random number generator
@@ -68,8 +80,41 @@ namespace csi281 {
   // TIP: It may be helpful to swap the pivot to the end,
   // sort the center of the range, and then move the pivot back to
   // the appropriate place
+
+  // I added an extra partition function based on the gameguild gg website
+  template <typename T> int partition(T array[], const int start, const int end) {
+    // YOUR CODE HERE
+    // also gameguild gg / previous assignment code for the random
+    uniform_int_distribution<int> dist(start, end);
+
+    int pivotIndex = dist(rng);
+    swap(array[pivotIndex], array[end]);
+
+    T pivotVal = array[end];
+    int i = start - 1;
+
+    // rearrange the array so items less than go before the pivot and items greater than go after the pivot
+    for (int j = start; j < end; j++) {
+      if (array[j] < pivotVal) {
+        i++;
+        swap(array[i], array[j]);
+      }
+    }
+
+    swap(array[i + 1], array[end]);
+    return i + 1;
+  }
+
   template <typename T> void quickSort(T array[], const int start, const int end) {
     // YOUR CODE HERE
+      if (start < end) {
+        // sort the two halves with a random pivot
+        int pivot = partition<T>(array, start, end);
+
+        // recursive sorting of the two halfs
+        quickSort(array, start, pivot - 1);
+        quickSort(array, pivot + 1, end);
+      }
   }
 
   // Performs an in-place ascending sort of *array*
@@ -86,6 +131,20 @@ namespace csi281 {
   // sort part of the array as per the parameters of this version
   template <typename T> void insertionSort(T array[], const int start, const int end) {
     // YOUR CODE HERE
+    // my assignment 4 code tweaked
+    if (start >= end)
+      return;
+    for (int i = start + 1; i <= end; i++) {
+      T key = array[i];
+      int j = i - 1;
+
+      // shift the array if the part is greater than the key
+      while (j >= start && array[j] > key) {
+        array[j + 1] = array[j];
+        j--;
+      }
+      array[j + 1] = key;
+    }
   }
 
   // Performs an in-place ascending sort of *array*
@@ -98,6 +157,23 @@ namespace csi281 {
   // should be able to call the insertionSort above
   template <typename T> void hybridSort(T array[], const int start, const int end) {
     // YOUR CODE HERE
+    // array is already sorted
+    if (start >= end) { return;}
+
+    // insertion sort if array is smaller than 10 elements
+    if ((end - start + 1) < 10) {
+      insertionSort(array, start, end);
+      return;
+    }
+
+    // do merge sort when greater than 10 elements still
+    int mid = start + ((end - start) / 2);
+
+    // switched the merge sorts to hybrid sorts since if the partition is less than ten, we save time by insertion sorting it
+    hybridSort(array, start, mid);
+    hybridSort(array, mid + 1, end);
+
+    inplace_merge(array + start, array + mid + 1, array + end + 1);
   }
 
 }  // namespace csi281
