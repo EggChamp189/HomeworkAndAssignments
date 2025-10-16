@@ -66,6 +66,24 @@ namespace csi281 {
     // the original and not a copy
     void put(const K key, const V value) {
       // YOUR CODE HERE
+      int index = hashKey(key) % capacity;
+      list<pair<K, V>> &bucketTemp = backingStore[index]; // doing it like this doesn't make this inplace, so lmk if I did it wrong
+
+      // check for pre-existing key and update it if so
+      for (auto &p : bucketTemp) {
+        if (p.first == key) {
+          p.second = value;
+          return;
+        }
+      }
+      // put in the back if not
+      bucketTemp.emplace_back(key, value);
+      count++;
+
+      // check for resizing
+      if (getLoadFactor() > MAX_LOAD_FACTOR) {
+        resize(capacity * growthFactor);
+      }
     }
 
     // Get the item associated with a particular key
@@ -79,6 +97,17 @@ namespace csi281 {
     // the original and not a copy
     optional<V> get(const K &key) {
       // YOUR CODE HERE
+        // same thing as the put function but it finds something instead of rewriting it
+      int index = hashKey(key) % capacity;
+      list<pair<K, V>> &bucketTemp = backingStore[index];
+
+      // check for pre-existing key and update it if so
+      for (const auto &p : bucketTemp) {
+        if (p.first == key) {
+          return p.second;
+        }
+      }
+      return nullopt;
     }
 
     // Remove a key and any associated value from the hash table
@@ -89,6 +118,17 @@ namespace csi281 {
     // the original and not a copy
     void remove(const K &key) {
       // YOUR CODE HERE
+      int index = hashKey(key) % capacity;
+      list<pair<K, V>> &bucketTemp = backingStore[index];
+
+      // use the remove_if! ty for the function, if only I had read the instructions before spending way too long on this LOL
+      auto originalSize = bucketTemp.size();
+      bucketTemp.remove_if([&](const pair<K, V> &p) { return p.first == key; });
+
+      // reduce the count if the search removed anything
+      if (bucketTemp.size() < originalSize) {
+        count--;
+      }
     }
 
     // Calculate and return the load factor
@@ -123,6 +163,25 @@ namespace csi281 {
     // the backingStore for the first time
     void resize(int cap) {
       // YOUR CODE HERE
+      // keep the old backing store in a temporary buffer and keep the old capacity
+      list<pair<K, V>> *tempBuffer = backingStore;
+      int oldCapacity = capacity;
+
+      // update the values and make a new backing store of the correct size
+      capacity = cap;
+      backingStore = new list<pair<K, V>>[capacity];
+
+      // hash and insert everything back into the new backing store
+      count = 0;
+      if (tempBuffer != nullptr) {
+        for (int i = 0; i < oldCapacity; i++) {
+          for (const auto &p : tempBuffer[i]) {
+            put(p.first, p.second);
+          }
+        }
+        // only call the delete function IF THERE WAS A BACKING STORE TO NOT CAUSE A THOUSAND ERRORS
+        delete[] tempBuffer;
+      }
     }
 
     // hash anything into an integer appropriate for
