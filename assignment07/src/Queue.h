@@ -37,6 +37,28 @@ namespace csi281 {
   template <typename T> class Queue : public SequentialCollection<T> {
   public:
     // YOUR CODE HERE
+
+    // enqueue but I override the other function
+    void push(const T& value) override {
+      backingStore.push_back(value);
+    }
+
+    // dequeue but override
+    T pop() override {
+      if (backingStore.empty()) {
+        throw std::out_of_range("underflow?: stack is empty, can't pop!!!");
+      }
+      T toRemove = backingStore.front();
+      backingStore.pop_front();
+      return toRemove;
+    }
+
+    T& peek() override {
+      if (backingStore.empty()) {
+        throw std::out_of_range("underflow?: stack is empty, nothing to peek!!!");
+      }
+      return backingStore.front();
+    }
   protected:
     using SequentialCollection<T>::backingStore;
   };

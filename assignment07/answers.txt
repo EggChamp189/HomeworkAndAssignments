@@ -1,0 +1,6 @@
+Tetra!!! thats my name
+
+1. some examples of irl queue could be: people waiting in a line to buy a video game, cars waiting in traffic, and applying to beta test a game.
+2. some examples of irl stack could be: undoing and redoing in google docs or something similar, doing dishes when people keep adding to the pile, a chat on a streaming device.
+3. No, since the tests are only as good as the programmer considers to test. If the programmer forgets to test, then the tests don't do much.
+4. Linked lists are better since it has dynamic mem allocation, so the structure can grow and shrink without having to manually expand as much, in addition to being WAY more efficient.

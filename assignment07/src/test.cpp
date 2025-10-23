@@ -47,6 +47,37 @@ TEST_CASE("Queue Tests", "[queue]") {
     // work properly in concert with getCount()
     // and remove()
     // YOUR CODE HERE
+    // first check if empty
+    CHECK(q1.getCount() == 0);
+
+    // check pushing
+    q1.push(1);
+    q1.push(2);
+    q1.push(3);
+
+    // check numbers are in the correct spots
+    CHECK(q1.getCount() == 3);
+    CHECK(q1.peek() == 1);
+
+    // check popping
+    int thePopped = q1.pop();
+    CHECK(thePopped == 1);
+    CHECK(q1.getCount() == 2);
+    CHECK(q1.peek() == 2);
+
+    // remove all 2
+    q1.remove(2);
+    CHECK(q1.getCount() == 1);
+    CHECK(q1.peek() == 3);
+
+    // pop the final one
+    thePopped = q1.pop();
+    CHECK(thePopped == 3);
+    CHECK(q1.getCount() == 0);
+
+    // queue should now break
+    CHECK_THROWS_AS(q1.pop(), std::out_of_range);
+    CHECK_THROWS_AS(q1.peek(), std::out_of_range);
   }
 
   SECTION("Queue w/ string tests") {
@@ -55,6 +86,30 @@ TEST_CASE("Queue Tests", "[queue]") {
     // work properly in concert with getCount()
     // and remove()
     // YOUR CODE HERE
+    // first check if empty
+    CHECK(q2.getCount() == 0);
+    // push!!!!!
+    q2.push("joe");
+    q2.push("obama"); // no one know's obama's last name...
+    q2.push("barack");
+
+    // check the new thingy
+    CHECK(q2.getCount() == 3);
+    CHECK(q2.peek() == "joe");
+
+    // test pop
+    string thePopped = q2.pop();
+    CHECK(thePopped == "joe");
+    CHECK(q2.peek() == "obama");
+
+    // DESTROY ALL OBAMNA
+    q2.remove("obama");
+    CHECK(q2.getCount() == 1);
+    CHECK(q2.peek() == "barack");
+
+    // finish destroying yhe queue
+    q2.pop();
+    CHECK(q2.getCount() == 0);
   }
 }
 
@@ -65,6 +120,37 @@ TEST_CASE("Stack Tests", "[stack]") {
     // work properly in concert with getCount()
     // and remove()
     // YOUR CODE HERE
+    // // first check if empty
+    CHECK(s1.getCount() == 0);
+
+    // check pushing
+    s1.push(3);
+    s1.push(2);
+    s1.push(1);
+
+    // check numbers are in the correct spots
+    CHECK(s1.getCount() == 3);
+    CHECK(s1.peek() == 1);
+
+    // check popping
+    int thePopped = s1.pop();
+    CHECK(thePopped == 1);
+    CHECK(s1.getCount() == 2);
+    CHECK(s1.peek() == 2);
+
+    // remove all 2
+    s1.remove(2);
+    CHECK(s1.getCount() == 1);
+    CHECK(s1.peek() == 3);
+
+    // pop the final one
+    thePopped = s1.pop();
+    CHECK(thePopped == 3);
+    CHECK(s1.getCount() == 0);
+
+    // queue should now break
+    CHECK_THROWS_AS(s1.pop(), std::out_of_range);
+    CHECK_THROWS_AS(s1.peek(), std::out_of_range);
   }
 
   SECTION("Stack w/ string tests") {
@@ -73,5 +159,29 @@ TEST_CASE("Stack Tests", "[stack]") {
     // work properly in concert with getCount()
     // and remove()
     // YOUR CODE HERE
+    // first check if empty
+    CHECK(s2.getCount() == 0);
+    // push!!!!!
+    s2.push("barack");
+    s2.push("obama");  // no one know's obama's last name...
+    s2.push("joe");
+
+    // check the new thingy
+    CHECK(s2.getCount() == 3);
+    CHECK(s2.peek() == "joe");
+
+    // test pop
+    string thePopped = s2.pop();
+    CHECK(thePopped == "joe");
+    CHECK(s2.peek() == "obama");
+
+    // DESTROY ALL OBAMNA
+    s2.remove("obama");
+    CHECK(s2.getCount() == 1);
+    CHECK(s2.peek() == "barack");
+
+    // finish destroying yhe queue
+    s2.pop();
+    CHECK(s2.getCount() == 0);
   }
 }

@@ -30,6 +30,7 @@
 #define stack_hpp
 
 #include "SequentialCollection.h"
+#include <stdexcept> // I think we need this
 
 using namespace std;
 
@@ -37,6 +38,28 @@ namespace csi281 {
   template <typename T> class Stack : public SequentialCollection<T> {
   public:
     // YOUR CODE HERE
+
+    void push(const T& value) override {
+      // YOU CAN USE THE LIST LIBRARY.... LIKE THE PUSH AND POP FUNCTIONS LKBMN;LKERWT, OEINJRVGBWPOE[VNBIE
+      backingStore.push_front(value);
+    }
+
+    T pop() override {
+      if (backingStore.empty()) {
+        throw std::out_of_range("underflow?: stack is empty, can't pop!!!");
+      }
+      T toRemove = backingStore.front();
+      backingStore.pop_front();
+      return toRemove;
+    }
+
+    T& peek() override {
+      if (backingStore.empty()) {
+        throw std::out_of_range("underflow?: stack is empty, nothing to peek!!!");
+      }
+      return backingStore.front();
+    }
+
   protected:
     using SequentialCollection<T>::backingStore;
   };
