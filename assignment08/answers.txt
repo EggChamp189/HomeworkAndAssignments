@@ -1,0 +1,5 @@
+Tetra
+1. It depends because bfs searchs level by level, finding the shortest path in a graph, while dfs searches as deep as possible. Essentially, if the goal is very close to the start, bfs would be faster because it explores all the nearby nodes first, and if the goal is along the first path, dfs finds it much faster than bfs.
+2. The worst case big-O would be O(V + E) (V being the number of verticies and E being the number of edges) since each vertex would be checked once, and each edge is checked only once. 
+3. The adjacency matrix wastes a lot of space when there isn't much data in the graph, being n^2 time instead of a linear n time.
+4. An example would be doing a maze by going until you hit a dead end and backtrack once failing a path, sequentially removing all possibilities until one remains.

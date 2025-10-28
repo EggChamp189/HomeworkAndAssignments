@@ -30,6 +30,7 @@
 #define graph_hpp
 
 #include <iostream>
+#include <cassert> // added this so the thing doesn't break when it sees assert
 #include <list>
 #include <optional>
 #include <queue>
@@ -75,6 +76,12 @@ namespace csi281 {
     // if either is not in the graph, return false
     bool edgeExists(const V &from, const V &to) {
       // YOUR CODE HERE
+      // check if both vertexes exist 
+      if (adjacencyList.find(from) == adjacencyList.end() || adjacencyList.find(to) == adjacencyList.end()) {
+        return false;
+      }
+      // then check if the 'to' is in the adjacency set of 'from'
+      return adjacencyList[from].find(to) != adjacencyList[from].end();
     }
 
     using Path = list<V>;
@@ -105,6 +112,34 @@ namespace csi281 {
       // YOUR CODE HERE
       // TIP: Start by defining a frontier and putting start onto it.
       // TIP: Follow the pseudocode from the slides from class
+      // frontier is the not yet explored area of the search
+      stack<V> frontier;
+      frontier.push(start);
+
+      // explore while there is still more
+      while (!frontier.empty()) {
+        V current = frontier.top();
+        frontier.pop();
+
+        // if found, return
+        if (current == goal) {
+          return pathMapToPath(explored, const_cast<V &>(goal));
+        }
+
+        // check next explorable areas that are new
+        for (const V &child : neighbors(current)) {
+          // skip if already explored
+          if (explored.find(child) != explored.end()) {
+            continue;
+          }
+          // mark how we got here, then push the new node to explore
+          explored[child] = current;
+          frontier.push(child);
+        }
+      }
+
+      // didn't find goal
+      return nullopt;
     }
 
     // Perform a breadth-first search from *start*, looking for *goal*
@@ -120,6 +155,34 @@ namespace csi281 {
       // TIP: Start by defining a frontier and putting start onto it.
       // TIP: Follow the pseudocode from the slides from class
       // TIP: This should be very similar to dfs
+      // frontier is the not yet explored area of the search, only real difference from dfs seems to be queue instead of stack
+      queue<V> frontier;
+      frontier.push(start);
+
+      // explore while there is still more
+      while (!frontier.empty()) {
+        V current = frontier.front();
+        frontier.pop();
+
+        // if found, return
+        if (current == goal) {
+          return pathMapToPath(explored, const_cast<V &>(goal));
+        }
+
+        // check next explorable areas that are new
+        for (const V &child : neighbors(current)) {
+          // skip if already explored
+          if (explored.find(child) != explored.end()) {
+            continue;
+          }
+          // mark how we got here, then push the new node to explore
+          explored[child] = current;
+          frontier.push(child);
+        }
+      }
+
+      // didn't find goal
+      return nullopt;
     }
 
     // Utility function if you need it
