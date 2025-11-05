@@ -179,3 +179,60 @@ TEST_CASE("dijkstra() cityGraph2 Test", "[dijksta]") {
 // reuse cityGraph or cityGraph2. Cite any sources.
 // Make sure that your assertions are fairly comprehensive.
 // Look at the prior two tests as examples.
+
+TEST_CASE("dijkstra() simplerGraph Test", "[dijkstra]") {
+  WeightedGraph<string, int> simplerGraph = WeightedGraph<string, int>();
+  // graph visualization for my sanity:
+  //    A
+  //  4/ \2
+  // B -5- C
+  // |1   8|
+  // D -3- E
+  // So, the shortest path should be a total of 8, being A->B->D->E
+  // make the graph edges (bidirectional)
+  simplerGraph.addEdge("A", "B", 4);
+  simplerGraph.addEdge("A", "C", 2);
+  simplerGraph.addEdge("B", "C", 5);
+  simplerGraph.addEdge("B", "D", 1);
+  simplerGraph.addEdge("C", "E", 8);
+  simplerGraph.addEdge("D", "E", 3);
+
+  cout << "------simplerGraph------" << endl;
+  simplerGraph.debugPrint();
+
+  // run dijkstra starting from A
+  auto resultPair = simplerGraph.dijkstra("A");
+  auto parentResults = resultPair.first;
+  auto weightResults = resultPair.second;
+
+  // check the computed shortest distances from A
+  CHECK(weightResults["A"] == 0);  // A = 0
+  CHECK(weightResults["B"] == 4);  // A->B = 4
+  CHECK(weightResults["C"] == 2);  // A->C = 2
+  CHECK(weightResults["D"] == 5);  // A->B->D = 4+1
+  CHECK(weightResults["E"] == 8);  // A->B->D->E = 4+1+3
+
+  // check the shortest path to E
+  auto path = simplerGraph.pathMapToPath(parentResults, "E");
+  cout << "------simplerGraph path (A to E)------" << endl;
+  printPath(path);
+
+  // should be A->B->D->E
+  CHECK(path.size() == 4); 
+  CHECK(path.front() == "A");
+  CHECK(path.back() == "E");
+
+  // check all edges along the path exist
+  auto first = path.begin();
+  auto last = path.front();
+  for (unsigned long i = 1; i < path.size(); i++) {
+    first++;
+    auto current = *first;
+    CHECK(simplerGraph.edgeExists(last, current));
+    last = current;
+  }
+
+  // show full map jic it missed some node or smthin
+  cout << "------All Distances from A------" << endl;
+  simplerGraph.printMap(weightResults);
+}

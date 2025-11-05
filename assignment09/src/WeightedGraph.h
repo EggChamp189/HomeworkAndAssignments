@@ -140,6 +140,27 @@ namespace csi281 {
       // use other pseudocode as long as you cite it. Please
       // do not look at other C++ solutions.
 
+      // I viewed the psuedocode on the wikipedia page and tried to adapt it
+      while (!frontier.empty()) {
+        auto currentPair = frontier.top();
+        frontier.pop();
+
+        W currentWeight = currentPair.first;
+        V currentVertex = currentPair.second;
+
+        for (auto const &neighborPair : adjacencyList[currentVertex]) {
+          V neighbor = neighborPair.first;
+          W edgeWeight = neighborPair.second;
+          W newWeight = currentWeight + edgeWeight;
+
+          if (weights.find(neighbor) == weights.end() || newWeight < weights[neighbor]) {
+            weights[neighbor] = newWeight;
+            parents[neighbor] = currentVertex;
+            frontier.push(make_pair(newWeight, neighbor));
+          }
+        }
+      }
+
       return make_pair(parents, weights);
     }
 
