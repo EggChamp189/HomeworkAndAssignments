@@ -1,0 +1,15 @@
+﻿Tetra Gee
+1. To change it to a maximum spanning tree, you would push the largest weights first and pop the highest weight edges rather than lowest.
+2. An MST connects all the vertices with minimum total weight and no cycling to make the shortest tree, while the travelling salesman problem finds a singular minimum weight cycle by visiting each vertex one time and then returning to the start, making the shortest loop.
+3. 
+
+~~~~~        Seattle  Chicago  SanFrancisco  LosAngeles  Riverside
+Seattle      0        1737     678           ∞           ∞
+Chicago      1737     0        ∞             ∞           1704
+SanFrancisco 678      ∞        0             348         386
+LosAngeles   ∞        ∞        348           0           50
+Riverside    ∞        1704     386           50          0
+
+4. When a priority queue is used it is O(e Log V), while without it is O(V^2). There is a difference because using a priority queue makes selecting the next smallest edge faster.
+5. The algorithm is greedy because it picks the smallest edge connecting to a new vertex, which are locally optimal choices that form the globally optimal tree. Used this source for the info: https://www3.cs.stonybrook.edu/~skiena/373/newlectures/lecture13.pdf?utm_source=chatgpt.com
+6. The Bellman Ford algorithm was meant for finding the shortest path from a single vertex, like dijkstra's algorithm. This was discovered by Shimbel, but is named after Bellman and Ford who were the ones who published the algorithm. Found from wikipedia: https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm

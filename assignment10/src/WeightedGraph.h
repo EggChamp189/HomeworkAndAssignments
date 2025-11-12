@@ -38,6 +38,9 @@
 #include <utility>
 #include <vector>
 
+// assert include forgotten again!!!!
+#include <assert.h>
+
 #include "MemoryLeakDetector.h"
 
 using namespace std;
@@ -128,9 +131,34 @@ namespace csi281 {
       // this aligns with the inner function visit() from the pseudo code in the slides
       auto visit = [&](V v) {
         // YOUR CODE HERE
+        visited.insert(v);
+        for (auto &edge : neighborsWithWeights(v)) {
+          // mark already visited vertices to be skipped
+          if (visited.find(edge.to) == visited.end()) 
+            frontier.push(edge);
+        }
       };
 
       // YOUR CODE HERE
+      // use the lambda expression
+      visit(start);
+
+      // process edges until all reachable vertices are connected
+      while (!frontier.empty()) {
+        WeightedEdge edge = frontier.top();
+        frontier.pop();
+
+        // skip edges to vertices already visited
+        if (visited.find(edge.to) != visited.end()) {
+          continue;
+        }
+
+        // add edge to the tree
+        solution.push_back(edge);
+
+        // visit the next vertice connected by the edge
+        visit(edge.to);
+      }
 
       return solution;
     }
