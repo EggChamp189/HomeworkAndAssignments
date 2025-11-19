@@ -178,6 +178,7 @@ TEST_CASE("random BST<int> test", "[rand BST<int>]") {
     REQUIRE(i == sampleIntArray1[index]);
     index++;
   }
+  delete[] sampleIntArray1; // I added this to fix a memory leak -- I can remove it if you want lol
 }
 
 TEST_CASE("BST<int> timing test", "[time BST<int>]") {

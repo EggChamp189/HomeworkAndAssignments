@@ -62,7 +62,9 @@ namespace csi281 {
     }
 
     // Delete all nodes
-    ~BST() { deleteHelper(root); }
+    ~BST() {
+      deleteHelper(root);
+    }
 
     // Add a new node to the tree with *key*
     // Make sure to insert it into the correct place
@@ -72,12 +74,55 @@ namespace csi281 {
     // need to initialize root
     void insert(T key) {
       // YOUR CODE HERE
+      // just make the root if the tree is empty
+      if (root == nullptr) {
+        root = new Node(key, nullptr, nullptr);
+        count++;
+        return;
+      }
+
+      // iteratively go down the tree
+      Node *curr = root;
+      while (true) {
+        // less than or equal to keys go to the left subtree first
+        if (key <= curr->key) {
+          // found empty spot on the left
+          if (curr->left == nullptr) {
+            curr->left = new Node(key, nullptr, nullptr);
+            count++;
+            return;
+          }
+          // go to the next if there isn't space
+          curr = curr->left;
+        } else {
+          // greater keys go to right
+          if (curr->right == nullptr) {
+            curr->right = new Node(key, nullptr, nullptr);
+            count++;
+            return;
+          }
+          // go to the next if there isn't space
+          curr = curr->right;
+        }
+      }
     }
 
     // Do a search through the tree and return
     // whether or not it contains *key*
     bool contains(const T &key) {
       // YOUR CODE HERE
+      Node *curr = root;
+
+      while (curr != nullptr) {
+        // key found!
+        if (key == curr->key) return true;
+
+        // decide which to check next
+        curr = (key < curr->key) ? curr->left : curr->right;
+      }
+
+      // no key found
+      return false;
     }
 
     // Helper for inOrderWalk() to call for entire bst
@@ -89,18 +134,48 @@ namespace csi281 {
     // TIP: See page 288 of Chapter 12 of Introduction to Algorithms
     void inOrderWalk(list<T> &accumulated, Node *current) {
       // YOUR CODE HERE
+      // base case nothing
+      if (current == nullptr) return;
+
+      // linear traversal:
+      // 1. check left
+      inOrderWalk(accumulated, current->left);
+
+      // 2. check current
+      accumulated.push_back(current->key);
+
+      // 3. check right
+      inOrderWalk(accumulated, current->right);
     }
 
     // Find the minimum key in the tree
     // If the tree is empty, return nullopt
     optional<T> minimum() {
       // YOUR CODE HERE
+      // if the tree is empty, there just won't be a min
+      if (root == nullptr) return nullopt;
+
+      // the min will always be left
+      Node *curr = root;
+      while (curr->left != nullptr) {
+        curr = curr->left;
+      }
+      return curr->key;
     }
 
     // Find the maximum key in the tree
     // If the tree is empty, return nullopt
     optional<T> maximum() {
       // YOUR CODE HERE
+      // if the tree is empty, there just won't anything
+      if (root == nullptr) return nullopt;
+
+      // max is always at the right
+      Node *curr = root;
+      while (curr->right != nullptr) {
+        curr = curr->right;
+      }
+      return curr->key;
     }
 
     // How many nodes are in the tree?
